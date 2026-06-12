@@ -1,0 +1,3 @@
+## 2026-06-12 - Added aria-label to icon buttons and fixed API key startup crash
+**Learning:** This app requires 'GEMINI_API_KEY' in the environment at build/run time to initialize the `GoogleGenAI` client properly, or it crashes entirely. Lazy loading the client instantiation prevents the app from failing on load when the key is omitted, ensuring a progressive enhancement approach for AI features.
+**Action:** Always check if external SDKs require immediate initialization on module load. If so, move the initialization to a lazy-load function or factory that checks for the API key only when the feature is explicitly invoked.
