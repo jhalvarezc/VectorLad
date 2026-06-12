@@ -3,10 +3,16 @@
 import { GoogleGenAI, Chat } from "@google/genai";
 import { VectorData, AIExplanation } from "../types";
 
-// Always use process.env.API_KEY directly when initializing.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
+// Initialize lazily to prevent crashing when API key is missing
+let ai: GoogleGenAI | null = null;
 let activeChat: Chat | null = null;
+
+const getAI = () => {
+  if (!ai && process.env.API_KEY) {
+    ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  }
+  return ai;
+};
 
 export const startExploration = async (
   v1: VectorData,
@@ -27,8 +33,17 @@ export const startExploration = async (
     4. RESPUESTAS EN ESPAÑOL.
   `;
 
+  const aiInstance = getAI();
+  if (!aiInstance) {
+    return {
+      title: "IA no disponible ⚠️",
+      explanation: "No se configuró la API KEY de Gemini.",
+      physicalInterpretation: "La aplicación funciona sin IA, pero el tutor está desactivado."
+    };
+  }
+
   // Start chat with model name and config as per guidelines.
-  activeChat = ai.chats.create({
+  activeChat = aiInstance.chats.create({
     model: "gemini-3-flash-preview",
     config: {
       systemInstruction,
