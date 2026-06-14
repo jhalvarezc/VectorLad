@@ -228,11 +228,11 @@ const App: React.FC = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">Añadir Vector</h2>
             <div className="flex bg-slate-800 rounded-lg p-0.5">
-               <button onClick={() => setInputTab('cartesian')} className={`p-1 rounded-md transition-all ${inputTab === 'cartesian' ? 'bg-blue-600 shadow-md' : 'hover:bg-slate-700 opacity-50'}`}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18"/><path d="M12 3v18"/></svg>
+               <button onClick={() => setInputTab('cartesian')} aria-label="Modo cartesiano" title="Modo cartesiano" className={`p-1 rounded-md transition-all ${inputTab === 'cartesian' ? 'bg-blue-600 shadow-md' : 'hover:bg-slate-700 opacity-50'}`}>
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18"/><path d="M12 3v18"/></svg>
                </button>
-               <button onClick={() => setInputTab('polar')} className={`p-1 rounded-md transition-all ${inputTab === 'polar' ? 'bg-blue-600 shadow-md' : 'hover:bg-slate-700 opacity-50'}`}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="m12 12 5-5"/></svg>
+               <button onClick={() => setInputTab('polar')} aria-label="Modo polar" title="Modo polar" className={`p-1 rounded-md transition-all ${inputTab === 'polar' ? 'bg-blue-600 shadow-md' : 'hover:bg-slate-700 opacity-50'}`}>
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="m12 12 5-5"/></svg>
                </button>
             </div>
           </div>
@@ -242,8 +242,9 @@ const App: React.FC = () => {
               {['X', 'Y', 'Z'].map((axis) => (
                 (axis !== 'Z' || dimensionMode === '3D') && (
                   <div key={axis}>
-                    <label className="block text-[8px] text-center text-slate-500 uppercase mb-1">{axis}</label>
+                    <label htmlFor={`coord-${axis}`} className="block text-[8px] text-center text-slate-500 uppercase mb-1">{axis}</label>
                     <input 
+                      id={`coord-${axis}`}
                       type="number" 
                       value={axis === 'X' ? newX : axis === 'Y' ? newY : newZ} 
                       onChange={e => {
@@ -261,24 +262,25 @@ const App: React.FC = () => {
           ) : (
             <div className="space-y-3 mb-4 animate-in fade-in zoom-in duration-300">
               <div>
-                <label className="block text-[8px] text-slate-500 uppercase mb-1">Magnitud (r): {mag}</label>
-                <input type="range" min="0" max="20" step="0.1" value={mag} onChange={e => setMag(Number(e.target.value))} className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                <label htmlFor="mag-input" className="block text-[8px] text-slate-500 uppercase mb-1">Magnitud (r): {mag}</label>
+                <input id="mag-input" type="range" min="0" max="20" step="0.1" value={mag} onChange={e => setMag(Number(e.target.value))} className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
               </div>
               <div>
-                <label className="block text-[8px] text-slate-500 uppercase mb-1">Azimut (θ): {azimuth}°</label>
-                <input type="range" min="0" max="360" value={azimuth} onChange={e => setAzimuth(Number(e.target.value))} className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                <label htmlFor="azimuth-input" className="block text-[8px] text-slate-500 uppercase mb-1">Azimut (θ): {azimuth}°</label>
+                <input id="azimuth-input" type="range" min="0" max="360" value={azimuth} onChange={e => setAzimuth(Number(e.target.value))} className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
               </div>
               {dimensionMode === '3D' && (
                 <div>
-                  <label className="block text-[8px] text-slate-500 uppercase mb-1">Elevación (φ): {elevation}°</label>
-                  <input type="range" min="-90" max="90" value={elevation} onChange={e => setElevation(Number(e.target.value))} className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                  <label htmlFor="elevation-input" className="block text-[8px] text-slate-500 uppercase mb-1">Elevación (φ): {elevation}°</label>
+                  <input id="elevation-input" type="range" min="-90" max="90" value={elevation} onChange={e => setElevation(Number(e.target.value))} className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
                 </div>
               )}
             </div>
           )}
 
           <div className="flex gap-2">
-            <input type="color" value={newColor} onChange={e => setNewColor(e.target.value)} className="w-10 h-10 rounded-xl bg-transparent border-0 cursor-pointer overflow-hidden shadow-inner" />
+            <label htmlFor="color-picker-input" className="sr-only">Color del vector</label>
+            <input id="color-picker-input" aria-label="Color del vector" type="color" value={newColor} onChange={e => setNewColor(e.target.value)} className="w-10 h-10 rounded-xl bg-transparent border-0 cursor-pointer overflow-hidden shadow-inner" />
             <button onClick={addVector} className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-black py-2 rounded-xl text-[10px] uppercase tracking-widest shadow-lg shadow-blue-600/20 transition-all active:scale-95">Crear</button>
           </div>
         </div>
@@ -288,8 +290,9 @@ const App: React.FC = () => {
           
           <div className="p-4 bg-slate-800/60 rounded-2xl border border-slate-700/50 shadow-inner group">
             <div className="flex justify-between items-center mb-3">
-               <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest group-focus-within:text-purple-400 transition-colors">Factor Escalar (k)</label>
+               <label htmlFor="scalar-input" className="text-[9px] font-black text-slate-400 uppercase tracking-widest group-focus-within:text-purple-400 transition-colors">Factor Escalar (k)</label>
                <input 
+                  id="scalar-input"
                   type="text" 
                   value={scalarInput} 
                   onChange={e => setScalarInput(e.target.value)}
@@ -298,6 +301,7 @@ const App: React.FC = () => {
                />
             </div>
             <input 
+               aria-label="Factor Escalar"
                type="range" 
                min="-10" 
                max="10" 
@@ -337,7 +341,7 @@ const App: React.FC = () => {
             const isSelected = selectionIndex !== -1;
             return (
               <div key={v.id} onClick={() => handleSelection(v.id)} className={`relative min-w-[110px] p-3 rounded-[24px] border cursor-pointer transition-all duration-300 flex flex-col items-center gap-1.5 group ${isSelected ? 'bg-slate-800 border-blue-500 -translate-y-2 shadow-xl' : 'bg-slate-900/40 border-slate-800 hover:border-slate-600'}`} style={isSelected ? { borderColor: v.color, boxShadow: `0 10px 30px ${v.color}22` } : {}}>
-                <button onClick={(e) => { e.stopPropagation(); deleteVector(v.id); }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500/90 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] z-10">✕</button>
+                <button aria-label="Eliminar vector" title="Eliminar vector" onClick={(e) => { e.stopPropagation(); deleteVector(v.id); }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500/90 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] z-10">✕</button>
                 {isSelected && <div className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full flex items-center justify-center font-black text-[9px] text-white shadow-lg z-10 animate-in zoom-in" style={{ backgroundColor: v.color }}>{selectionIndex + 1}</div>}
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm" style={{ backgroundColor: `${v.color}22`, color: v.color }}>{v.label}</div>
                 <div className="flex flex-col items-center">
@@ -367,7 +371,7 @@ const App: React.FC = () => {
                     <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20 text-sm">🤖</div>
                     <h2 className="text-[10px] font-black text-white uppercase tracking-wider">Tutor Geométrico</h2>
                   </div>
-                  <button onClick={() => { setExplanation(null); setChatHistory([]); }} className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-500 transition-colors">✕</button>
+                  <button aria-label="Cerrar tutor" title="Cerrar tutor" onClick={() => { setExplanation(null); setChatHistory([]); }} className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-500 transition-colors">✕</button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-950/20 scroll-custom min-h-0">
                   {chatHistory.map((msg, i) => (
@@ -379,8 +383,9 @@ const App: React.FC = () => {
                   <div ref={chatEndRef} />
                 </div>
                 <form onSubmit={handleAskQuestion} className="p-3 border-t border-slate-800 bg-slate-900/80 flex gap-2">
-                  <input type="text" value={userQuestion} onChange={e => setUserQuestion(e.target.value)} placeholder="¿Por qué se estira el vector?" className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-[10px] outline-none focus:border-blue-500 transition-colors placeholder:opacity-30" />
-                  <button disabled={!userQuestion.trim() || isAsking} type="submit" className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white p-2 rounded-xl transition-all active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+                  <label htmlFor="chat-input" className="sr-only">Tu pregunta</label>
+                  <input id="chat-input" aria-label="Tu pregunta" type="text" value={userQuestion} onChange={e => setUserQuestion(e.target.value)} placeholder="¿Por qué se estira el vector?" className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-[10px] outline-none focus:border-blue-500 transition-colors placeholder:opacity-30" />
+                  <button aria-label="Enviar pregunta" title="Enviar pregunta" disabled={!userQuestion.trim() || isAsking} type="submit" className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white p-2 rounded-xl transition-all active:scale-90"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
                 </form>
               </>
             )}
