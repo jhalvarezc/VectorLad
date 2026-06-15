@@ -329,7 +329,14 @@ const App: React.FC = () => {
             <button disabled={selectedIds.length < 2} onClick={() => performOperation('angle')} className="bg-amber-600/20 hover:bg-amber-600/30 text-amber-400 disabled:opacity-20 text-[9px] py-2.5 rounded-xl font-black border border-amber-600/20 col-span-2 transition-all shadow-sm uppercase tracking-widest">Ángulo (θ)</button>
             <button disabled={selectedIds.length === 0} onClick={normalizeSelected} className="col-span-2 bg-emerald-600/80 hover:bg-emerald-500 text-white text-[10px] py-3 rounded-xl font-black border border-emerald-400/30 transition-all active:scale-95 uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20">Normalizar</button>
           </div>
-          <button onClick={() => { setVectors([]); setSelectedIds([]); setAngleVisual(null); setExplanation(null); }} className="w-full text-[8px] text-red-400/50 hover:text-red-400 font-bold uppercase tracking-[0.3em] pt-2 transition-colors">Limpiar Escena</button>
+          {selectedIds.length < 2 && vectors.length > 0 && (
+            <p className="text-[8px] text-slate-400 text-center italic opacity-80 mt-2 mb-1 px-2">Selecciona 2 vectores abajo para realizar operaciones</p>
+          )}
+          <button onClick={() => {
+            if (vectors.length > 0 && window.confirm("¿Seguro que deseas limpiar la escena?")) {
+              setVectors([]); setSelectedIds([]); setAngleVisual(null); setExplanation(null);
+            }
+          }} className="w-full text-[8px] text-red-400/50 hover:text-red-400 font-bold uppercase tracking-[0.3em] pt-2 transition-colors">Limpiar Escena</button>
         </div>
       </div>
 
@@ -351,7 +358,12 @@ const App: React.FC = () => {
               </div>
             );
           })}
-          {vectors.length === 0 && <div className="px-8 py-4 text-[10px] text-slate-500 uppercase font-black tracking-widest opacity-50 italic">Escena Vacía</div>}
+          {vectors.length === 0 && (
+            <div className="px-8 py-4 flex flex-col items-center justify-center opacity-50">
+              <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest italic">Escena Vacía</span>
+              <span className="text-[8px] text-slate-400 mt-1">Crea tu primer vector en el panel izquierdo</span>
+            </div>
+          )}
         </div>
       </div>
 
