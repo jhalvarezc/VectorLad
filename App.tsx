@@ -217,8 +217,8 @@ const App: React.FC = () => {
           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Geometría Avanzada</p>
         </div>
         <div className="pointer-events-auto bg-slate-900/80 backdrop-blur-md p-1.5 rounded-xl border border-slate-700 shadow-lg flex gap-1">
-          <button onClick={() => setDimensionMode('2D')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${dimensionMode === '2D' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}>R2</button>
-          <button onClick={() => setDimensionMode('3D')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${dimensionMode === '3D' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}>R3</button>
+          <button aria-label="Cambiar a modo 2D" aria-pressed={dimensionMode === '2D'} onClick={() => setDimensionMode('2D')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${dimensionMode === '2D' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}>R2</button>
+          <button aria-label="Cambiar a modo 3D" aria-pressed={dimensionMode === '3D'} onClick={() => setDimensionMode('3D')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${dimensionMode === '3D' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}>R3</button>
         </div>
       </div>
 
@@ -340,7 +340,14 @@ const App: React.FC = () => {
             const selectionIndex = selectedIds.indexOf(v.id);
             const isSelected = selectionIndex !== -1;
             return (
-              <div key={v.id} onClick={() => handleSelection(v.id)} className={`relative min-w-[110px] p-3 rounded-[24px] border cursor-pointer transition-all duration-300 flex flex-col items-center gap-1.5 group ${isSelected ? 'bg-slate-800 border-blue-500 -translate-y-2 shadow-xl' : 'bg-slate-900/40 border-slate-800 hover:border-slate-600'}`} style={isSelected ? { borderColor: v.color, boxShadow: `0 10px 30px ${v.color}22` } : {}}>
+              <div key={v.id}
+                role="button"
+                tabIndex={0}
+                aria-pressed={isSelected}
+                aria-label={`Seleccionar vector ${v.label}`}
+                onClick={() => handleSelection(v.id)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelection(v.id); } }}
+                className={`relative min-w-[110px] p-3 rounded-[24px] border cursor-pointer transition-all duration-300 flex flex-col items-center gap-1.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${isSelected ? 'bg-slate-800 border-blue-500 -translate-y-2 shadow-xl' : 'bg-slate-900/40 border-slate-800 hover:border-slate-600'}`} style={isSelected ? { borderColor: v.color, boxShadow: `0 10px 30px ${v.color}22` } : {}}>
                 <button aria-label="Eliminar vector" title="Eliminar vector" onClick={(e) => { e.stopPropagation(); deleteVector(v.id); }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500/90 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] z-10">✕</button>
                 {isSelected && <div className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full flex items-center justify-center font-black text-[9px] text-white shadow-lg z-10 animate-in zoom-in" style={{ backgroundColor: v.color }}>{selectionIndex + 1}</div>}
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm" style={{ backgroundColor: `${v.color}22`, color: v.color }}>{v.label}</div>
