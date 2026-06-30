@@ -340,11 +340,16 @@ const App: React.FC = () => {
             const selectionIndex = selectedIds.indexOf(v.id);
             const isSelected = selectionIndex !== -1;
             return (
-              <div key={v.id} onClick={() => handleSelection(v.id)} className={`relative min-w-[110px] p-3 rounded-[24px] border cursor-pointer transition-all duration-300 flex flex-col items-center gap-1.5 group ${isSelected ? 'bg-slate-800 border-blue-500 -translate-y-2 shadow-xl' : 'bg-slate-900/40 border-slate-800 hover:border-slate-600'}`} style={isSelected ? { borderColor: v.color, boxShadow: `0 10px 30px ${v.color}22` } : {}}>
-                <button aria-label="Eliminar vector" title="Eliminar vector" onClick={(e) => { e.stopPropagation(); deleteVector(v.id); }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500/90 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] z-10">✕</button>
-                {isSelected && <div className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full flex items-center justify-center font-black text-[9px] text-white shadow-lg z-10 animate-in zoom-in" style={{ backgroundColor: v.color }}>{selectionIndex + 1}</div>}
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm" style={{ backgroundColor: `${v.color}22`, color: v.color }}>{v.label}</div>
-                <div className="flex flex-col items-center">
+              <div key={v.id} role="group" className={`relative min-w-[110px] p-3 rounded-[24px] border transition-all duration-300 flex flex-col items-center gap-1.5 group ${isSelected ? 'bg-slate-800 border-blue-500 -translate-y-2 shadow-xl' : 'bg-slate-900/40 border-slate-800 hover:border-slate-600'}`} style={isSelected ? { borderColor: v.color, boxShadow: `0 10px 30px ${v.color}22` } : {}}>
+                <button
+                  aria-label={`Seleccionar vector ${v.label}`}
+                  onClick={() => handleSelection(v.id)}
+                  className="absolute inset-0 w-full h-full rounded-[24px] z-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                />
+                <button aria-label="Eliminar vector" title="Eliminar vector" onClick={(e) => { e.stopPropagation(); deleteVector(v.id); }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500/90 text-white rounded-full opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none transition-opacity flex items-center justify-center text-[8px] z-10">✕</button>
+                {isSelected && <div className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full flex items-center justify-center font-black text-[9px] text-white shadow-lg z-10 animate-in zoom-in pointer-events-none" style={{ backgroundColor: v.color }}>{selectionIndex + 1}</div>}
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm pointer-events-none z-10" style={{ backgroundColor: `${v.color}22`, color: v.color }}>{v.label}</div>
+                <div className="flex flex-col items-center pointer-events-none z-10">
                   <span className="text-[9px] font-mono font-bold text-white/80">{v.x}, {v.y}{dimensionMode === '3D' ? `, ${v.z}` : ''}</span>
                   <span className="text-[7px] text-slate-500 uppercase tracking-tighter">Mag: {Math.sqrt(v.x**2 + v.y**2 + v.z**2).toFixed(1)}</span>
                 </div>
